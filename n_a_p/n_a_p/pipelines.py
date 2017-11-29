@@ -1,35 +1,16 @@
 # -*- coding: utf-8 -*-
 
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-from .items import ProductItem, PriceItem
-from nap_parser_app.tasks import main_func
+from n_a_p import items
+from nap_parser_app import tasks
 
 
 class NAPPipeline(object):
 
-    count = 0
-    products = []
-    prices = []
-
     def process_item(self, item, spider):
-        if type(item) == ProductItem:
-            self.products.append(dict(item))
-            self.count += 1
-        else:
-            self.prices.append(dict(item))
-            self.count += 1
-        if self.count >= 1000:
-            self.save_items()
-            self.count = 0
+        if type(item) is items.ProductItem:
+            tasks.add_product.delay([dict(item),])
+            # tasks.add_product.delay([dict(item),])
+        if type(item) is items.PriceItem:
+            tasks.add_price.delay([dict(item),])
+            # tasks.add_price.delay([dict(item),])
         return item
-
-    def save_items(self):
-        main_func.delay(self.products, self.prices)
-        self.products = []
-        self.prices = []
-
-    def close_spider(self, spider):
-        main_func.delay(self.products, self.prices)

@@ -3,7 +3,7 @@ from django import forms
 CATEGORY = (('Clothing','Clothing'),
             ('Shoes','Shoes'),
             ('Bags','Bags'),
-            ('Accessoires','Accessoires'),
+            ('Accessories','Accessories'),
             ('Gifts','Gifts'),
             ('Jewelry_and_Watches','Jewelry_and_Watches'),
             ('Lingerie','Lingerie'),

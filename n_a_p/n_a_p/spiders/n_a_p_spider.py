@@ -4,18 +4,17 @@ from datetime import datetime
 import json
 from scrapy_redis.spiders import RedisSpider
 
-
 class NAPSpiderSpider(RedisSpider):
    name = 'n_a_p_spider'
    host = 'https://www.net-a-porter.com'
-   def __init__(self, url='https://www.net-a-porter.com/ua/en/d/shop/Clothing/All?pn=1&npp=60&image_view=product&dScroll=0', *args, **kwargs):
+   product_id = 0
+   price_id = 0
+
+   def __init__(self, url='https://www.net-a-porter.com/ua/en/d/shop/Clothing'):
+       super(NAPSpiderSpider, self).__init__()
        self.url = url
-       super(NAPSpiderSpider, self).__init__(*args, **kwargs)
 
    def parse(self, response):
-       yield scrapy.Request(url=self.url, callback=self.get_subcategory)
-
-   def get_subcategory(self, response):
        '''category pages parsing'''
        cat_name = response.xpath('//h1/text()').extract_first()
        category_urls = response.xpath('//div[contains(@id,"sub-navigation-contents")]/ul/li/a')
@@ -41,6 +40,8 @@ class NAPSpiderSpider(RedisSpider):
        product = items.ProductItem()
        price = items.PriceItem()
 
+       product['id'] = self.product_id
+       self.product_id += 1
        product['site'] = self.host
        product['url'] = response.url
        product['site_product_id'] = \
@@ -59,6 +60,9 @@ class NAPSpiderSpider(RedisSpider):
            '//ul[contains(@class, "thumbnails no-carousel") or contains(@class, "swiper-wrapper") or contains(@class, "thumbnails")]/li/img/@src').extract()
        yield product
 
+       price['id'] = self.price_id
+       price['product_id'] = self.product_id
+       self.price_id += 1
        price['site_product_id'] = product['site_product_id']
        price['currency'] = 'GBP'
        price['date'] = datetime.now()
@@ -68,11 +72,13 @@ class NAPSpiderSpider(RedisSpider):
            price['price'] = int(int(amount)/int(divisor))
        else:
            price['price'] = 0
-       params = [1,2,3]
-       # params_data = json.loads(response.xpath('//div[contains(@class, "sizing-container")]/select-dropdown/@options').extract_first())
-       # for size in params_data:
-       #     params.append({'size':size['data']['size'], 'stock_level': size['data']['stock']})
+       params = []
+       res = response.xpath('//div[contains(@class, "sizing-container")]/select-dropdown/@options').extract_first('')
+       if res != '':
+           params_data = json.loads(res)
+           for size in params_data:
+               params.append({'size':size['data']['size'], 'stock_level': size['data']['stock']})
+       else:
+           params.append('No options')
        price['params'] = params
        yield price
-
-

@@ -5,6 +5,7 @@ import scrapy
 
 
 class ProductItem(scrapy.Item):
+    id = scrapy.Field()
     site = scrapy.Field()
     url = scrapy.Field()
     site_product_id = scrapy.Field()
@@ -17,6 +18,8 @@ class ProductItem(scrapy.Item):
 
 
 class PriceItem(scrapy.Item):
+    id = scrapy.Field()
+    product_id = scrapy.Field()
     site_product_id = scrapy.Field()
     currency = scrapy.Field()
     date = scrapy.Field()

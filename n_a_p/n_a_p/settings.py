@@ -7,9 +7,9 @@ import os
 import django
 
 # Django integration
-script_path = os.path.join(os.path.dirname(os.path.abspath('.')))
-sys.path.append(script_path)
-os.environ['DJANGO_SETTINGS_MODULE'] = 'nap_parser.settings'
+sys.path.append(os.path.dirname(os.path.abspath('.')))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'nap_parser.settings')
+
 django.setup()
 
 
@@ -18,6 +18,8 @@ BOT_NAME = 'n_a_p'
 SPIDER_MODULES = ['n_a_p.spiders']
 NEWSPIDER_MODULE = 'n_a_p.spiders'
 
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'n_a_p (+http://www.yourdomain.com)'
@@ -50,9 +52,9 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
-#    'n_a_p.middlewares.NAPSpiderMiddleware': 543,
-#}
+SPIDER_MIDDLEWARES = {
+   'n_a_p.middlewares.NAPSpiderMiddleware': 543,
+}
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
