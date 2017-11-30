@@ -40,6 +40,7 @@ then create superuser for the project:
     $ python manage.py createsuperuser
 
 and run in 3 separate terminals (each one in virtual environment):
+
     # first
     $ python manage.py runserver
     # second
