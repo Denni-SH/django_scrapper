@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p><a href="/">Back</a></p>
+	<h2><u>Prices:</u></h2>
+	<table border="1">
+		<tr>
+			<th>Product</th>
+			<th>Price</th>
+			<th>Site product id</th>
+			<th>Stock options</th>
+			<th>Currency</th>
+			<th>Date</th>
+		</tr>
+		{% for price in prices%}
+		<tr>
+			<td>{{price.product }}</td>
+			<td>{{price.price }}</td>
+			<td>{{price.site_product_id }}</td>
+			<td>{{price.stock_options }}</td>
+			<td>{{price.currency }}</td>
+			<td>{{price.date }}</td>
+		</tr>
+	    {% endfor %}
+	</table>
+    <p><a href="/">Back</a></p>
+{% endblock %}

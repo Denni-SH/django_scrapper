@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+    <p><a href="/">Back</a></p>
+	<h2><u>Products:</u></h2>
+	<table border="1">
+		<tr>
+			<th>Name</th>
+			<th>Url</th>
+			<th>Categories</th>
+			<th>Description</th>
+			<th>Brand</th>
+			<th>Site_product_id</th>
+			<th>Material</th>
+			<th>Images</th>
+			<th>Site</th>
+		</tr>
+		{% for product in products%}
+		<tr>
+			<td>{{product.name }}</td>
+			<td>{{product.url }}</td>
+			<td>{{product.categories }}</td>
+			<td>{{product.description }}</td>
+			<td>{{product.brand }}</td>
+			<td>{{product.site_product_id }}</td>
+			<td>{{product.material }}</td>
+			<td>{{product.images }}</td>
+			<td>{{product.site}}</td>
+		</tr>
+	    {% endfor %}
+	</table>
+	<p><a href="/">Back</a></p>
+{% endblock %}

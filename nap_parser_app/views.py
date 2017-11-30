@@ -1,7 +1,9 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import SimpleForm
 from redis.client import Redis
+from django.views.generic import ListView
+from .models import Product, Price
+
 client = Redis()
 
 def index(request):
@@ -18,3 +20,13 @@ def index(request):
 # Create your views here.
 def success(request):
     return render(request, template_name="success.html")
+
+class ProductsPage(ListView):
+    template_name = 'products.html'
+    model = Product
+    context_object_name = 'products'
+
+class PricesPage(ListView):
+    template_name = 'prices.html'
+    model = Price
+    context_object_name = 'prices'
